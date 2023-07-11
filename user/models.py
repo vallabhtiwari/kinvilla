@@ -26,6 +26,11 @@ class Resident(models.Model):
         if self.room:
             self.room.occupied = True
             self.room.save()
+        else:
+            q = Resident.objects.filter(pk=self.pk)
+            if q:
+                q[0].room.occupied = False
+                q[0].room.save()
         super(Resident, self).save(*args, **kwargs)
 
     def __str__(self):
