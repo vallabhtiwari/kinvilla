@@ -10,7 +10,7 @@ class CreateUserView(CreateView):
     template_name = "user/register.html"
     model = User
     form_class = UserRegisterForm
-    success_url = reverse_lazy("home:home")
+    success_url = reverse_lazy("user:user-login")
 
     def get(self, request, *args, **kwargs):
         form = UserRegisterForm()
