@@ -4,7 +4,11 @@
 <h2><a href="#">Rooms</a></h2>
 <h2><a href="#">Facilities</a></h2>
 <h2><a href="#">About</a></h2>
-<h2><a href="{% url 'user:user-register' %}">Login/SignUp</a></h2>
+{% if user.is_authenticated %}
+    <h2><a href="{% url 'user:user-logout' %}">Logout</a></h2>
+{% else %}
+    <h2><a href="{% url 'user:user-register' %}">Login/SignUp</a></h2>
+{% endif %}
 <br><br>
 ----------------------------------------------------------
 <h2>F1 &nbsp;&nbsp;&nbsp;F2&nbsp;&nbsp;&nbsp;F3&nbsp;&nbsp;&nbsp;F4</h2>
