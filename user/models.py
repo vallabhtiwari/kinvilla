@@ -17,20 +17,21 @@ class User(AbstractUser):
 class Resident(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     father_name = models.CharField(max_length=50, null=True, blank=True)
-    address = models.CharField(max_length=100)
+    address = models.CharField(max_length=100, null=True, blank=True)
     profession = models.CharField(max_length=50, null=True, blank=True)
     work_address = models.CharField(max_length=100, null=True, blank=True)
     room = models.OneToOneField(Room, null=True, blank=True, on_delete=models.SET_NULL)
 
     def save(self, *args, **kwargs):
+        # first clearing the status of room in the database
+        q = Resident.objects.filter(pk=self.pk)
+        if q and q[0].room:
+            q[0].room.occupied = False
+            q[0].room.save()
+        # setting occupied for correct room
         if self.room:
             self.room.occupied = True
             self.room.save()
-        else:
-            q = Resident.objects.filter(pk=self.pk)
-            if q:
-                q[0].room.occupied = False
-                q[0].room.save()
         super(Resident, self).save(*args, **kwargs)
 
     def __str__(self):
