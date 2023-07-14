@@ -21,3 +21,7 @@ class Room(models.Model):
 
     def __str__(self):
         return f"{self.room_number}"
+
+    @classmethod
+    def get_unoccupied_rooms(cls):
+        return cls.objects.filter(occupied=False)
