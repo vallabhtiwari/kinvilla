@@ -13,5 +13,5 @@ urlpatterns = [
         LogoutView.as_view(template_name="user/logout.html"),
         name="user-logout",
     ),
-    path("update/<int:pk>", ResidentUpdateView.as_view(), name="user-update"),
+    path("update/<slug:resident_id>", ResidentUpdateView.as_view(), name="user-update"),
 ]
