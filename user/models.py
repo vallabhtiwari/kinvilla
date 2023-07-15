@@ -23,6 +23,7 @@ class Resident(models.Model):
     room = models.OneToOneField(Room, null=True, blank=True, on_delete=models.SET_NULL)
 
     def save(self, *args, **kwargs):
+        super(Resident, self).save(*args, **kwargs)
         # first clearing the status of room in the database
         q = Resident.objects.filter(pk=self.pk)
         if q and q[0].room:
@@ -32,7 +33,6 @@ class Resident(models.Model):
         if self.room:
             self.room.occupied = True
             self.room.save()
-        super(Resident, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user}"
+        return f"{self.user.first_name}"
