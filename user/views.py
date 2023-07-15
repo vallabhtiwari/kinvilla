@@ -1,9 +1,9 @@
 from django.shortcuts import redirect, render
-from django.views.generic import View, CreateView
+from django.views.generic import View, CreateView, UpdateView
 from django.urls import reverse_lazy
 
-from .forms import UserRegisterForm
-from .models import User
+from .forms import UserRegisterForm, ResidentUpdateForm
+from .models import User, Resident
 
 # Create your views here.
 class CreateUserView(CreateView):
@@ -14,6 +14,20 @@ class CreateUserView(CreateView):
 
     def get(self, request, *args, **kwargs):
         form = UserRegisterForm()
+        context = {
+            "form": form,
+        }
+        return render(request, self.template_name, context)
+
+
+class ResidentUpdateView(UpdateView):
+    model = Resident
+    form_class = ResidentUpdateForm
+    template_name = "user/resident_update.html"
+    success_url = reverse_lazy("user:user-login")
+
+    def get(self, request, *args, **kwargs):
+        form = ResidentUpdateForm(instance=request.user.resident)
         context = {
             "form": form,
         }
