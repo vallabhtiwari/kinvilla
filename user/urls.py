@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import CreateUserView, ResidentUpdateView
+from .views import CreateUserView, ResidentUpdateView, ResidentDetailView
 
 app_name = "user"
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
         name="user-logout",
     ),
     path("update/<slug:resident_id>", ResidentUpdateView.as_view(), name="user-update"),
+    path("<slug:resident_id>/", ResidentDetailView.as_view(), name="user-detail"),
 ]

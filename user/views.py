@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.views.generic import View, CreateView, UpdateView
+from django.views.generic import View, CreateView, UpdateView, DetailView
 from django.urls import reverse_lazy
 
 from .forms import UserRegisterForm, ResidentUpdateForm
@@ -18,6 +18,12 @@ class CreateUserView(CreateView):
             "form": form,
         }
         return render(request, self.template_name, context)
+
+
+class ResidentDetailView(DetailView):
+    model = Resident
+    slug_url_kwarg = "resident_id"
+    slug_field = "resident_id"
 
 
 class ResidentUpdateView(UpdateView):
