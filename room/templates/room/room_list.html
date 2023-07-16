@@ -1,0 +1,3 @@
+{% for room in room_list %}
+<h1><a href="{% url 'room:room-detail' room.floor room.room_number %}">{{room.room_number}}</a></h2>
+  {% endfor %}

@@ -1,0 +1,6 @@
+{% load custom_filters %}
+<h2>Room : {{room.room_number}}</h2>
+<h2>Floor : {{room.floor|parse_floor}}</h2>
+<h2>Type : {{room.type|parse_type}}</h2>
+<h2>AC : {{room.ac|yesno:"Yes,No"}}</h2>
+<h2>Status : {{room.occupied|yesno:"Occupied,Vaccant"}}</h2>
