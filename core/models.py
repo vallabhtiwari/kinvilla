@@ -32,10 +32,19 @@ class Verification(models.Model):
         ("0", "In Process"),
         ("1", "Verified"),
     ]
-    person = models.OneToOneField(Resident, on_delete=models.CASCADE)
+    person = models.OneToOneField(
+        Resident,
+        primary_key=True,
+        to_field="resident_id",
+        serialize=False,
+        on_delete=models.CASCADE,
+    )
     id_type = models.CharField(max_length=1, choices=ID_CHOICES)
-    id_number = models.CharField(max_length=50, primary_key=True, unique=True)
+    id_number = models.CharField(max_length=50)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+
+    class Meta:
+        unique_together = ["id_type", "id_number"]
 
     def __str__(self):
         return f"{self.person}"
