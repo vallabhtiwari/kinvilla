@@ -8,3 +8,5 @@
   <li><strong>Work Address :</strong>{{resident.address}}</li>
   <li><strong>Room :</strong>{{resident.room.room_number}}</li>
 </ul>
+<h2><a href="{% url 'user:user-update' resident.resident_id %}">Edit</a></h2>
+<h2><a href="{% url 'user:user-logout' %}">Logout</a></h2>
