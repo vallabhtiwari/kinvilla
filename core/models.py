@@ -11,10 +11,10 @@ class Booking(models.Model):
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
     )
-    applicant = models.OneToOneField(Resident, null=True, on_delete=models.SET_NULL)
+    applicant = models.ForeignKey(Resident, null=True, on_delete=models.SET_NULL)
     date_applied = models.DateTimeField(auto_now_add=True)
     room_applied = models.CharField(max_length=3, default="xxx")
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="0")
 
     def __str__(self):
         return f"{self.applicant} -> {self.room_applied}"
@@ -41,7 +41,7 @@ class Verification(models.Model):
     )
     id_type = models.CharField(max_length=1, choices=ID_CHOICES)
     id_number = models.CharField(max_length=50)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="0")
 
     class Meta:
         unique_together = ["id_type", "id_number"]

@@ -23,6 +23,7 @@ class Resident(models.Model):
     profession = models.CharField(max_length=50, null=True, blank=True)
     work_address = models.CharField(max_length=100, null=True, blank=True)
     room = models.OneToOneField(Room, null=True, blank=True, on_delete=models.SET_NULL)
+    check_in_date = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # first clearing the status of room in the database
