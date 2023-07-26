@@ -55,5 +55,18 @@ class CreateResidentVerificationView(CreateView):
             kwargs={"resident_id": self.request.user.resident.resident_id},
         )
 
-    # def post(self, request, *args, **kwargs):
-    #     return super().post(request, *args, **kwargs)
+
+class UpdateVerificationiView(UpdateView):
+    fields = ["status"]
+    model = Verification
+    pk_url_kwarg = "resident_id"
+    template_name = "core/resident_verification.html"
+    success_url = reverse_lazy("user:admin-dashboard")
+
+
+class UpdateBookingView(UpdateView):
+    fields = ["room_applied", "status"]
+    model = Booking
+    pk_url_kwarg = "booking_id"
+    template_name = "core/booking.html"
+    success_url = reverse_lazy("user:admin-dashboard")
