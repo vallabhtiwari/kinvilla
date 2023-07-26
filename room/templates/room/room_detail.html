@@ -5,7 +5,11 @@
 <h2>AC : {{room.ac|yesno:"Yes,No"}}</h2>
 <h2>Status : {{room.occupied|yesno:"Occupied,Vaccant"}}</h2>
 <br>
-<button type="submit" id="booking-button">Book</button>
+{% if room.occupied %}
+    <button type="submit" id="booking-button" disabled>Book</button>
+{% else %}
+    <button type="submit" id="booking-button">Book</button>
+{% endif %}
 {% csrf_token %}
 <script>
     const bookingButton = document.getElementById("booking-button")
@@ -30,7 +34,7 @@
             console.log(data)
             if(data.redirect) {
                 console.log(data.redirect_url)
-                window.location.href = data.edirect_url
+                window.location.href = data.redirect_url
             }
         })
             .catch((error) => {
