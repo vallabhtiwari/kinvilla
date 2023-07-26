@@ -19,13 +19,23 @@ class CreateBookingView(View):
             "message": "Booking successful, please wait till it is confirmed...",
         }
         room_number = json.load(request).get("room_number")
+        room = Room.objects.filter(room_number=room_number)
+        if not room:
+            context["success"] = False
+            context["message"] = "Room with given room number does not exists"
+            return JsonResponse(context, status=HTTPStatus.BAD_REQUEST)
+
+        if room[0].occupied:
+            context["success"] = False
+            context["message"] = "Room is not vaccant"
+            return JsonResponse(context, status=HTTPStatus.BAD_REQUEST)
+
         # if not verified stuff :
         if not Verification.objects.filter(person=request.user.resident):
             context["success"] = False
             context["redirect"] = True
             context["redirect_url"] = reverse("user:user-verification")
             context["message"] = "Applicant not verified"
-
             return JsonResponse(context, status=HTTPStatus.TEMPORARY_REDIRECT)
 
         old_bookings = Booking.objects.filter(applicant=request.user.resident).filter(
@@ -34,7 +44,7 @@ class CreateBookingView(View):
         if old_bookings:
             context["success"] = False
             context["message"] = "Pending booking exists already"
-            return JsonResponse(context, status=HTTPStatus.TEMPORARY_REDIRECT)
+            return JsonResponse(context, status=HTTPStatus.BAD_REQUEST)
 
         booking = Booking.objects.create(
             applicant=request.user.resident, room_applied=room_number
