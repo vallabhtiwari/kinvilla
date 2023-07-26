@@ -1,6 +1,11 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import CreateUserView, ResidentUpdateView, ResidentDetailView
+from .views import (
+    CreateUserView,
+    ResidentUpdateView,
+    ResidentDetailView,
+    AdminDashboardView,
+)
 
 from core.views import CreateResidentVerificationView
 
@@ -21,5 +26,6 @@ urlpatterns = [
         CreateResidentVerificationView.as_view(),
         name="user-verification",
     ),
+    path("admin/dashboard/", AdminDashboardView.as_view(), name="admin-dashboard"),
     path("<slug:resident_id>/", ResidentDetailView.as_view(), name="user-detail"),
 ]
