@@ -1,0 +1,24 @@
+<h2>Bookings</h2>
+<ul>
+  {% for booking in pending_bookings %}
+  <li><a href="{% url 'core:update-booking' booking.id %}">{{booking}}</a></li>
+  {% endfor %}
+</ul>
+<ul>
+  {% for booking in complete_bookings %}
+  <li><a href="{% url 'core:update-booking' booking.id %}">{{booking}}</a></li>
+  {% endfor %}
+</ul>
+
+<br>
+<h2>Verifications</h2>
+<ul>
+  {% for verification in pending_verifications %}
+  <li><a href="{% url 'core:update-verification' verification.person.resident_id %}">{{verification}}</a></li>
+  {% endfor %}
+</ul>
+<ul>
+  {% for verification in complete_verifications %}
+  <li><a href="{% url 'core:update-verification' verification.person.resident_id %}">{{verification}}</a></li>
+  {% endfor %}
+</ul>
