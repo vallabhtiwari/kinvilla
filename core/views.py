@@ -8,6 +8,7 @@ import json
 
 from .models import Booking, Verification
 from .forms import ResidentVerificationForm
+from room.models import Room
 
 # Create your views here.
 class CreateBookingView(View):
@@ -73,3 +74,19 @@ class UpdateBookingView(UpdateView):
     pk_url_kwarg = "booking_id"
     template_name = "core/booking.html"
     success_url = reverse_lazy("user:admin-dashboard")
+
+    def form_valid(self, form):
+        booking = self.object
+        verification = Verification.objects.filter(person=booking.applicant)
+        if not verification.exists() or verification[0].status == "0":
+            form.add_error(None, "Resident not verified")
+            return self.form_invalid(form)
+
+        current_room = Room.objects.filter(room_number=booking.room_applied)
+        if not current_room:
+            form.add_error(
+                "room_applied", "Room with given room number does not exists"
+            )
+            return self.form_invalid(form)
+
+        return super().form_valid(form)

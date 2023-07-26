@@ -1,4 +1,4 @@
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
 from django.db import models
 from user.models import Resident
 from room.models import Room
@@ -21,25 +21,25 @@ class Booking(models.Model):
     def __str__(self):
         return f"{self.applicant} -> {self.room_applied}"
 
-    def clean(self):
-        old_bookings = Booking.objects.filter(
-            applicant=self.applicant, status="0"
-        ).exclude(id=self.id)
-        if old_bookings.exists():
-            raise ValidationError(
-                {"status": "A Booking is already pending for this applicant."}
-            )
-        verification = Verification.objects.filter(person=self.applicant)
-        if not verification.exists():
-            raise ValidationError(
-                {"applicant": "Applicant must be verified before booking a room."}
-            )
+    # def clean(self):
+    #     old_bookings = Booking.objects.filter(
+    #         applicant=self.applicant, status="0"
+    #     ).exclude(id=self.id)
+    #     if old_bookings.exists():
+    #         raise ValidationError(
+    #             {"status": "A Booking is already pending for this applicant."}
+    #         )
+    #     verification = Verification.objects.filter(person=self.applicant)
+    #     if not verification.exists():
+    #         raise ValidationError(
+    #             {"applicant": "Applicant must be verified before booking a room."}
+    #         )
 
-        current_room = Room.objects.filter(room_number=self.room_applied)
-        if not current_room:
-            raise ValidationError(
-                {"room_applied": "Room with given room number does not exists"}
-            )
+    #     current_room = Room.objects.filter(room_number=self.room_applied)
+    #     if not current_room:
+    #         raise ValidationError(
+    #             {"room_applied": "Room with given room number does not exists"}
+    #         )
 
     def save(self, *args, **kwargs):
         if self.status == "1":
