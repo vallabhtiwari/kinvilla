@@ -42,9 +42,10 @@ class Booking(models.Model):
             )
 
     def save(self, *args, **kwargs):
-        current_room = Room.objects.filter(room_number=self.room_applied)
-        self.applicant.room = current_room[0]
-        self.applicant.save()
+        if self.status == "1":
+            current_room = Room.objects.filter(room_number=self.room_applied)
+            self.applicant.room = current_room[0]
+            self.applicant.save()
         return super(Booking, self).save(*args, **kwargs)
 
 
