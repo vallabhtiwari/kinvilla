@@ -1,8 +1,8 @@
-# from django.shortcuts import reverse, reverse_lazy
+from django.shortcuts import redirect
 from django.http import JsonResponse
 
 from django.urls import reverse, reverse_lazy
-from django.views.generic import View, CreateView
+from django.views.generic import UpdateView, View, CreateView
 from http import HTTPStatus
 import json
 
@@ -15,6 +15,7 @@ class CreateBookingView(View):
         context = {
             "success": True,
             "redirect": False,
+            "message": "Booking successful, please wait till it is confirmed...",
         }
         room_number = json.load(request).get("room_number")
         # if not verified stuff :
@@ -22,6 +23,7 @@ class CreateBookingView(View):
             context["success"] = False
             context["redirect"] = True
             context["redirect_url"] = reverse("user:user-verification")
+            context["message"] = "Applicant not verified"
 
             return JsonResponse(context, status=HTTPStatus.TEMPORARY_REDIRECT)
 
@@ -30,6 +32,7 @@ class CreateBookingView(View):
         )
         if old_bookings:
             context["success"] = False
+            context["message"] = "Pending booking exists already"
             return JsonResponse(context, status=HTTPStatus.TEMPORARY_REDIRECT)
 
         booking = Booking.objects.create(
