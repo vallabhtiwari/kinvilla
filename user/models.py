@@ -5,6 +5,8 @@ from .manager import UserManager
 from room.models import Room
 from .utils import generate_resident_id
 
+from django.utils import timezone
+
 # Create your models here.
 class User(AbstractUser):
     username = None
@@ -28,13 +30,20 @@ class Resident(models.Model):
     def save(self, *args, **kwargs):
         # first clearing the status of room in the database
         q = Resident.objects.filter(pk=self.pk)
+        change_check_in_date = True
+
         if q and q[0].room:
             q[0].room.occupied = False
             q[0].room.save()
+
+            if q[0].room == self.room:
+                change_check_in_date = False
         # setting occupied for correct room
         if self.room:
             self.room.occupied = True
             self.room.save()
+        if change_check_in_date:
+            self.check_in_date = timezone.localtime(timezone.now())
 
         if not self.resident_id:
             resident_ids = get_all_resident_ids()
