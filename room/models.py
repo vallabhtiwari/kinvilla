@@ -17,6 +17,7 @@ class Room(models.Model):
     floor = models.CharField(max_length=1, choices=FLOOR_CHOICES)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     ac = models.BooleanField(null=True, blank=True)
+    rent = models.DecimalField(max_digits=7, decimal_places=2)
     occupied = models.BooleanField(default=False)
 
     def __str__(self):
