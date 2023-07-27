@@ -6,7 +6,9 @@ from room.models import Room
 
 # Create your models here.
 class Payment(models.Model):
-    payment_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    payment_id = models.UUIDField(
+        primary_key=True, unique=True, editable=False, default=uuid.uuid4
+    )
     transaction_id = models.CharField(max_length=100, null=True, blank=True)
     payer = models.ForeignKey(
         Resident, null=True, blank=True, on_delete=models.SET_NULL
