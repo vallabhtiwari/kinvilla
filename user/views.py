@@ -32,17 +32,16 @@ class ResidentUpdateView(UpdateView):
     model = Resident
     form_class = ResidentUpdateForm
     template_name = "user/resident_update.html"
-    success_url = reverse_lazy("user:user-login")
+    slug_field = "resident_id"
+    slug_url_kwarg = "resident_id"
 
-    def get(self, request, *args, **kwargs):
-        form = ResidentUpdateForm(instance=request.user.resident)
-        context = {
-            "form": form,
-        }
-        return render(request, self.template_name, context)
+    def get_success_url(self):
+        return reverse(
+            "user:user-detail", args=[self.request.user.resident.resident_id]
+        )
 
 
-class AdminDashboardView(View):
+class DashboardViewAdmin(View):
     template_name = "user/admin_dashboard.html"
 
     def get(self, request, *args, **kwargs):
