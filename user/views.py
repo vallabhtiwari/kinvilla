@@ -59,6 +59,16 @@ class DashboardViewAdmin(View):
             "complete_verifications": complete_verifications,
         }
         return render(request, self.template_name, context)
+
+
+class ResidentListViewAdmin(ListView):
+    model = Resident
+
+    def get_queryset(self):
+        residents = super().get_queryset()
+        return residents.filter(user__is_admin=False)
+
+
 class ResidentUpdateViewAdmin(UpdateView):
     model = Resident
     form_class = ResidentUpdateFormAdmin

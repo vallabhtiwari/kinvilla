@@ -2,6 +2,7 @@ from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from .views import (
     CreateUserView,
+    ResidentListViewAdmin,
     ResidentUpdateView,
     ResidentDetailView,
     DashboardViewAdmin,
@@ -29,6 +30,7 @@ urlpatterns = [
     ),
     # paths for admin user
     path("admin/dashboard/", DashboardViewAdmin.as_view(), name="admin-dashboard"),
+    path("admin/all-users/", ResidentListViewAdmin.as_view(), name="user-list"),
     path(
         "admin/update/<slug:resident_id>/",
         ResidentUpdateViewAdmin.as_view(),
