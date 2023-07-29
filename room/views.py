@@ -7,13 +7,15 @@ from .models import Room
 class RoomListView(ListView):
     model = Room
 
-    def get_queryset(self):
-        all_rooms = super().get_queryset()
-        current_floor_rooms = all_rooms.filter(floor=self.kwargs.get("floor")).order_by(
-            "occupied"
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context["room_list"] = (
+            context["room_list"]
+            .filter(floor=self.kwargs.get("floor"))
+            .order_by("occupied")
         )
-
-        return current_floor_rooms
+        context["floor"] = self.kwargs.get("floor")
+        return context
 
 
 class RoomDetailView(DetailView):

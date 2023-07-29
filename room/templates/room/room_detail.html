@@ -1,9 +1,12 @@
-{% load custom_filters %}
+{% load room_custom_filters %}
 <h2 data-room-id="{{room.room_number}}" id="room-number">Room : {{room.room_number}}</h2>
+<a href="{% url 'room:room-list' room.floor %}">Back</a>
+<hr>
 <h2>Floor : {{room.floor|parse_floor}}</h2>
 <h2>Type : {{room.type|parse_type}}</h2>
 <h2>AC : {{room.ac|yesno:"Yes,No"}}</h2>
 <h2>Status : {{room.occupied|yesno:"Occupied,Vaccant"}}</h2>
+<h2>Rent : {{room.rent}}</h2>
 <br>
 {% if room.occupied %}
     <button type="submit" id="booking-button" disabled>Book</button>
