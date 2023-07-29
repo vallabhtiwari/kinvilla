@@ -2,6 +2,7 @@
 from django.db import models
 from user.models import Resident
 from room.models import Room
+from django.utils import timezone
 import uuid
 
 # Create your models here.
@@ -45,6 +46,7 @@ class Booking(models.Model):
         if self.status == "1":
             current_room = Room.objects.filter(room_number=self.room_applied)
             self.applicant.room = current_room[0]
+            self.applicant.check_in_date = timezone.localtime(timezone.now())
             self.applicant.save()
         return super(Booking, self).save(*args, **kwargs)
 
