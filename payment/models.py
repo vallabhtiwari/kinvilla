@@ -18,7 +18,6 @@ class Payment(models.Model):
         Resident, null=True, blank=True, on_delete=models.SET_NULL
     )
     amount = models.DecimalField(max_digits=7, decimal_places=2)
-    first_payment = models.BooleanField(default=False)
     room = models.ForeignKey(Room, null=True, blank=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=1, choices=STATUS_CHOICE, default="2")
     date_of_payment = models.DateTimeField(null=True, blank=True)
@@ -26,3 +25,6 @@ class Payment(models.Model):
     razorpay_order_id = models.CharField(max_length=200, null=True, blank=True)
     razorpay_payment_id = models.CharField(max_length=200, null=True, blank=True)
     razorpay_signature = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.payer} -> ({self.room},{self.status})"
