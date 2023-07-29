@@ -9,6 +9,7 @@ import json
 from .models import Booking, Verification
 from .forms import ResidentVerificationForm
 from room.models import Room
+from payment.models import Payment
 
 # Create your views here.
 class CreateBookingView(View):
@@ -18,6 +19,7 @@ class CreateBookingView(View):
             "redirect": False,
             "message": "Booking successful, please wait till it is confirmed...",
         }
+
         room_number = json.load(request).get("room_number")
         room = Room.objects.filter(room_number=room_number)
         if not room:
@@ -25,12 +27,13 @@ class CreateBookingView(View):
             context["message"] = "Room with given room number does not exists"
             return JsonResponse(context, status=HTTPStatus.BAD_REQUEST)
 
+        # checking if room is already occupied
         if room[0].occupied:
             context["success"] = False
             context["message"] = "Room is not vaccant"
             return JsonResponse(context, status=HTTPStatus.BAD_REQUEST)
 
-        # if not verified stuff :
+        # if not resident verified stuff :
         if not Verification.objects.filter(person=request.user.resident):
             context["success"] = False
             context["redirect"] = True
@@ -38,6 +41,7 @@ class CreateBookingView(View):
             context["message"] = "Applicant not verified"
             return JsonResponse(context, status=HTTPStatus.TEMPORARY_REDIRECT)
 
+        # checking for old pending bookings
         old_bookings = Booking.objects.filter(applicant=request.user.resident).filter(
             status="0"
         )
@@ -46,11 +50,25 @@ class CreateBookingView(View):
             context["message"] = "Pending booking exists already"
             return JsonResponse(context, status=HTTPStatus.BAD_REQUEST)
 
+        # checking if payment done or not
+        payment = Payment.objects.filter(payer=request.user.resident).filter(
+            room=room[0]
+        )
+        if not payment:
+            context["success"] = False
+            context["redirect"] = True
+            context["redirect_url"] = reverse("payment:request-payment")
+            context["message"] = "Make payment first"
+
+            request.session["resident_id"] = request.user.resident.resident_id
+            request.session["room_number"] = room_number
+            return JsonResponse(context, status=HTTPStatus.TEMPORARY_REDIRECT)
+
+        # finally create the booking
         booking = Booking.objects.create(
             applicant=request.user.resident, room_applied=room_number
         )
         context["booking_id"] = booking.id
-
         return JsonResponse(context, status=HTTPStatus.OK)
 
 
