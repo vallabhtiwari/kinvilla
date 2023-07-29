@@ -10,6 +10,7 @@ class Booking(models.Model):
     STATUS_CHOICES = [
         ("0", "In Process"),
         ("1", "Confirmed"),
+        ("2", "Canceled"),
     ]
     id = models.UUIDField(
         primary_key=True, unique=True, editable=False, default=uuid.uuid4
@@ -62,6 +63,7 @@ class Verification(models.Model):
     STATUS_CHOICES = [
         ("0", "In Process"),
         ("1", "Verified"),
+        ("2", "Canceled"),
     ]
     person = models.OneToOneField(
         Resident,
