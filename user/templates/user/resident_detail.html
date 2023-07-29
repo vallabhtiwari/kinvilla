@@ -1,5 +1,7 @@
 {% load core_custom_filters %}
 <h2>Hi, {{resident.user.first_name}}</h2>
+<a href="{% url 'home:home' %}">Home</a>
+<hr>
 <ul>
     <li><strong>First name :</strong>{{resident.user.first_name}}</li>
     <li><strong>Last name :</strong>{{resident.user.last_name}}</li>
@@ -15,5 +17,4 @@
 {% endif %}
 <h2><a href="{% url 'user:user-update' resident.resident_id %}">Edit</a></h2>
 <h2><a href="{% url 'core:my-bookings' %}">My bookings</a></h2>
-<h2><a href="{% url 'home:home' %}">Home</a></h2>
 <h2><a href="{% url 'user:user-logout' %}">Logout</a></h2>
