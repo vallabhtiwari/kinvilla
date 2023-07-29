@@ -2,8 +2,10 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import HttpResponse, redirect, render, reverse
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView, UpdateView
 
 from .models import Payment
 from user.models import Resident
@@ -142,3 +144,25 @@ def handle_payment(request):
         # if other than POST request is made.
         print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
         return HttpResponseBadRequest()
+
+
+class PaymentListViewAdmin(ListView):
+    model = Payment
+    template_name = "payment/admin/payment_list_admin.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        all_payments = super().get_context_data(object_list=object_list, **kwargs)
+        context = {
+            "pending_payments": all_payments["object_list"].filter(status="2"),
+            "successful_payments": all_payments["object_list"].filter(status="1"),
+            "failed_payments": all_payments["object_list"].filter(status="0"),
+        }
+        return context
+
+
+class PaymentDetailViewAdmin(UpdateView):
+    model = Payment
+    fields = ["amount", "status"]
+    pk_url_kwarg = "payment_id"
+    template_name = "payment/admin/payment_detail_admin.html"
+    success_url = reverse_lazy("payment:payment-list-admin")
