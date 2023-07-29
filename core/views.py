@@ -85,7 +85,7 @@ class BookingListView(ListView):
 class CreateResidentVerificationView(CreateView):
     model = Verification
     form_class = ResidentVerificationForm
-    template_name = "core/resident_verification.html"
+    template_name = "core/resident_verification_form.html"
 
     def form_valid(self, form):
         form.instance.person = self.request.user.resident
@@ -98,20 +98,21 @@ class CreateResidentVerificationView(CreateView):
         )
 
 
-class UpdateVerificationiView(UpdateView):
+############################################################################################
+class UpdateVerificationiViewAdmin(UpdateView):
     fields = ["status"]
     model = Verification
     pk_url_kwarg = "resident_id"
-    template_name = "core/resident_verification.html"
-    success_url = reverse_lazy("user:admin-dashboard")
+    template_name = "core/admin/update_verification_admin.html"
+    success_url = reverse_lazy("core:verification-list-admin")
 
 
-class UpdateBookingView(UpdateView):
+class UpdateBookingViewAdmin(UpdateView):
     fields = ["room_applied", "status"]
     model = Booking
     pk_url_kwarg = "booking_id"
-    template_name = "core/booking.html"
-    success_url = reverse_lazy("user:admin-dashboard")
+    template_name = "core/admin/update_booking_admin.html"
+    success_url = reverse_lazy("core:booking-list-admin")
 
     def form_valid(self, form):
         booking = self.object
