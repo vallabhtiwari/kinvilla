@@ -4,7 +4,7 @@ from .views import (
     CreateUserView,
     ResidentUpdateView,
     ResidentDetailView,
-    AdminDashboardView,
+    ResidentUpdateViewAdmin,
 )
 
 from core.views import CreateResidentVerificationView
@@ -26,6 +26,11 @@ urlpatterns = [
         CreateResidentVerificationView.as_view(),
         name="user-verification",
     ),
-    path("admin/dashboard/", AdminDashboardView.as_view(), name="admin-dashboard"),
+    path(
+        "admin/update/<slug:resident_id>/",
+        ResidentUpdateViewAdmin.as_view(),
+        name="user-update-admin",
+    ),
+    ########################
     path("<slug:resident_id>/", ResidentDetailView.as_view(), name="user-detail"),
 ]
