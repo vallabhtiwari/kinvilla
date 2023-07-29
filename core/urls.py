@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import CreateBookingView, UpdateBookingView, UpdateVerificationiView
+from .views import (
+    BookingListView,
+)
 
 app_name = "core"
 urlpatterns = [
@@ -11,7 +13,6 @@ urlpatterns = [
     ),
     path(
         "update-booking/<str:booking_id>/",
-        UpdateBookingView.as_view(),
-        name="update-booking",
+    path("my-bookings/", BookingListView.as_view(), name="my-bookings"),
     ),
 ]

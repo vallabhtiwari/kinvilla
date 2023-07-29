@@ -2,7 +2,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 
 from django.urls import reverse, reverse_lazy
-from django.views.generic import UpdateView, View, CreateView
+from django.views.generic import UpdateView, View, CreateView, ListView
 from http import HTTPStatus
 import json
 
@@ -70,6 +70,16 @@ class CreateBookingView(View):
         )
         context["booking_id"] = booking.id
         return JsonResponse(context, status=HTTPStatus.OK)
+
+
+class BookingListView(ListView):
+    model = Booking
+
+    def get_queryset(self):
+        bookings = super().get_queryset()
+        return bookings.filter(applicant=self.request.user.resident).order_by(
+            "-date_applied"
+        )
 
 
 class CreateResidentVerificationView(CreateView):
