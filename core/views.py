@@ -129,3 +129,37 @@ class UpdateBookingViewAdmin(UpdateView):
             return self.form_invalid(form)
 
         return super().form_valid(form)
+
+
+class VerificationListViewAdmin(ListView):
+    model = Verification
+    template_name = "core/admin/verification_list_admin.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        all_verifications = super().get_context_data(object_list=object_list, **kwargs)
+        context = {
+            "pending_verifications": all_verifications["object_list"].filter(
+                status="0"
+            ),
+            "successful_verifications": all_verifications["object_list"].filter(
+                status="1"
+            ),
+            "cancled_verifications": all_verifications["object_list"].filter(
+                status="2"
+            ),
+        }
+        return context
+
+
+class BookingListViewAdmin(ListView):
+    model = Booking
+    template_name = "core/admin/booking_list_admin.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        all_bookings = super().get_context_data(object_list=object_list, **kwargs)
+        context = {
+            "pending_bookings": all_bookings["object_list"].filter(status="0"),
+            "successful_bookings": all_bookings["object_list"].filter(status="1"),
+            "cancled_bookings": all_bookings["object_list"].filter(status="2"),
+        }
+        return context
