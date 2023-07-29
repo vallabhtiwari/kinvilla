@@ -9,6 +9,7 @@ from .utils import generate_resident_id
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, primary_key=True)
+    is_admin = models.BooleanField(default=False)
     objects = UserManager()
 
     USERNAME_FIELD = "email"
