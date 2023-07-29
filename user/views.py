@@ -42,7 +42,7 @@ class ResidentUpdateView(UpdateView):
 
 
 class DashboardViewAdmin(View):
-    template_name = "user/admin_dashboard.html"
+    template_name = "user/admin/admin_dashboard.html"
 
     def get(self, request, *args, **kwargs):
         bookings = Booking.objects.all()
@@ -63,6 +63,7 @@ class DashboardViewAdmin(View):
 
 class ResidentListViewAdmin(ListView):
     model = Resident
+    template_name = "user/admin/resident_list_admin.html"
 
     def get_queryset(self):
         residents = super().get_queryset()
@@ -72,7 +73,7 @@ class ResidentListViewAdmin(ListView):
 class ResidentUpdateViewAdmin(UpdateView):
     model = Resident
     form_class = ResidentUpdateFormAdmin
-    template_name = "user/resident_update.html"
-    success_url = reverse_lazy("user:user-list")
+    template_name = "user/admin/resident_update_admin.html"
+    success_url = reverse_lazy("user:user-list-admin")
     slug_field = "resident_id"
     slug_url_kwarg = "resident_id"

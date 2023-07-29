@@ -30,7 +30,7 @@ urlpatterns = [
     ),
     # paths for admin user
     path("admin/dashboard/", DashboardViewAdmin.as_view(), name="admin-dashboard"),
-    path("admin/all-users/", ResidentListViewAdmin.as_view(), name="user-list"),
+    path("admin/all-users/", ResidentListViewAdmin.as_view(), name="user-list-admin"),
     path(
         "admin/update/<slug:resident_id>/",
         ResidentUpdateViewAdmin.as_view(),
