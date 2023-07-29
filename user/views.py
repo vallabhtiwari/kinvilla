@@ -1,8 +1,8 @@
-from django.shortcuts import redirect, render
-from django.views.generic import View, CreateView, UpdateView, DetailView
+from django.shortcuts import redirect, render, reverse
+from django.views.generic import ListView, View, CreateView, UpdateView, DetailView
 from django.urls import reverse_lazy
 
-from .forms import UserRegisterForm, ResidentUpdateForm
+from .forms import ResidentUpdateFormAdmin, UserRegisterForm, ResidentUpdateForm
 from .models import User, Resident
 
 from core.models import Booking, Verification
@@ -60,3 +60,10 @@ class AdminDashboardView(View):
             "complete_verifications": complete_verifications,
         }
         return render(request, self.template_name, context)
+class ResidentUpdateViewAdmin(UpdateView):
+    model = Resident
+    form_class = ResidentUpdateFormAdmin
+    template_name = "user/resident_update.html"
+    success_url = reverse_lazy("user:user-list")
+    slug_field = "resident_id"
+    slug_url_kwarg = "resident_id"
