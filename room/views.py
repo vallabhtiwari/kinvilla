@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import reverse
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
 from .models import Room
 
@@ -21,3 +21,35 @@ class RoomListView(ListView):
 class RoomDetailView(DetailView):
     model = Room
     pk_url_kwarg = "room_number"
+
+
+class AddRoomViewAdmin(CreateView):
+    model = Room
+    fields = ["room_number", "type", "ac", "rent", "occupied"]
+    template_name = "room/admin/room_form_admin.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["floor"] = self.kwargs.get("floor")
+        return context
+
+    def form_valid(self, form):
+        form.instance.floor = self.kwargs.get("floor")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "room:room-detail", args=[self.object.floor, self.object.room_number]
+        )
+
+
+class UpdateRoomViewAdmin(UpdateView):
+    model = Room
+    fields = ["type", "ac", "rent", "occupied"]
+    template_name = "room/admin/room_form_admin.html"
+    pk_url_kwarg = "room_number"
+
+    def get_success_url(self):
+        return reverse(
+            "room:room-detail", args=[self.object.floor, self.object.room_number]
+        )
