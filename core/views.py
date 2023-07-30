@@ -2,7 +2,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 
 from django.urls import reverse, reverse_lazy
-from django.views.generic import UpdateView, View, CreateView, ListView
+from django.views.generic import UpdateView, View, CreateView, ListView, TemplateView
 from http import HTTPStatus
 import json
 
@@ -68,7 +68,6 @@ class CreateBookingView(View):
         booking = Booking.objects.create(
             applicant=request.user.resident, room_applied=room_number
         )
-        context["booking_id"] = booking.id
         return JsonResponse(context, status=HTTPStatus.OK)
 
 
@@ -163,3 +162,7 @@ class BookingListViewAdmin(ListView):
             "cancled_bookings": all_bookings["object_list"].filter(status="2"),
         }
         return context
+
+
+class BookingSuccessfulView(TemplateView):
+    template_name = "core/booking_successful.html"

@@ -6,11 +6,17 @@ from .views import (
     UpdateVerificationiViewAdmin,
     BookingListView,
     VerificationListViewAdmin,
+    BookingSuccessfulView,
 )
 
 app_name = "core"
 urlpatterns = [
     path("create-booking/", CreateBookingView.as_view(), name="create-booking"),
+    path(
+        "booking-successful/",
+        BookingSuccessfulView.as_view(),
+        name="booking-successful",
+    ),
     path(
         "update-verification/<str:resident_id>/",
         UpdateVerificationiViewAdmin.as_view(),
