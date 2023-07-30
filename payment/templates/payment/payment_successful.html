@@ -1,4 +1,3 @@
-{{redirect_url}}
 <h1>Payment successful</h1>
 {% if room_number %}
 {% csrf_token %}
@@ -6,12 +5,12 @@
 {% else %}
 <h2>You will soon be redirected to your dashboard...</h2>
 {% endif %}
-
+<hr>
 <script>
   function redirectTo(url) {
     setTimeout(function () {
       window.location.href = url
-    }, 5000); // Redirect after 5 seconds (5000 milliseconds)
+    }, 3000); // Redirect after 3 seconds (3000 milliseconds)
   }
 
   var redirectUrl = "{{redirect_url}}"

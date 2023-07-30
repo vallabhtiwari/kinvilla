@@ -49,13 +49,15 @@ def request_payment(request):
         "http://" + str(get_current_site(request)) + "/payment/handle-payment/"
     )
 
-    context = {}
-    context["razorpay_order_id"] = razorpay_order_id
-    context["razorpay_key_id"] = settings.RAZORPAY_KEY_ID
-    context["razorpay_amount"] = amount
-    context["currency"] = "INR"
-    context["callback_url"] = callback_url
-    context["description"] = "Booking payment"
+    context = {
+        "razorpay_order_id": razorpay_order_id,
+        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+        "razorpay_amount": amount,
+        "currency": "INR",
+        "callback_url": callback_url,
+        "description": "New Booking",
+        "room_number": room.room_number,
+    }
     payment_obj.razorpay_order_id = razorpay_order_id
     payment_obj.save()
 
@@ -111,10 +113,7 @@ def handle_payment(request):
                     if not old_payments:
                         context["room_number"] = room.room_number
                         # payment successful page with redirect to make booking
-                        context["redirect_url"] = reverse(
-                            "room:room-detail",
-                            args=[room.floor, room.room_number],
-                        )
+                        context["redirect_url"] = reverse("core:booking-successful")
                     else:
                         # payment successful page with redirect to homepage/profile
                         context["redirect_url"] = reverse(
