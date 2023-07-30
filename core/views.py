@@ -19,6 +19,12 @@ class CreateBookingView(View):
             "redirect": False,
             "message": "Booking successful, please wait till it is confirmed...",
         }
+        if not request.user.is_authenticated:
+            context["success"] = False
+            context["redirect"] = True
+            context["redirect_url"] = reverse("user:user-login")
+            context["message"] = "Login to make a booking"
+            return JsonResponse(context, status=HTTPStatus.TEMPORARY_REDIRECT)
 
         room_number = json.load(request).get("room_number")
         room = Room.objects.filter(room_number=room_number)
