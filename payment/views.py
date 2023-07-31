@@ -130,26 +130,22 @@ def handle_payment(request):
                     return render(request, "payment/payment_successful.html", context)
                 except:
                     # if there is an error while capturing payment.
-                    print("PPPPPPPPPPPPPPPPPPPPPP")
                     payment_obj.status = "2"
                     payment_obj.save()
                     # payment failed page
                     return render(request, "payment/payment_failed.html", context)
             else:
                 # if signature verification fails.
-                print("QQQQQQQQQQQQQQQQQQQQQQ")
                 payment_obj.status = "0"
                 payment_obj.save()
                 # payment failed page
                 return render(request, "payment/payment_failed.html", context)
         except:
             # if we don't find the required parameters in POST data
-            print("RRRRRRRRRRRRRRRRRRRRRRRRR")
-            return render(request, "payment/payment_failed.html", context)
+            return HttpResponseBadRequest("<h2>Invalid Request</>")
     else:
         # if other than POST request is made.
-        print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("<h2>Invalid Request</>")
 
 
 class PaymentListViewAdmin(LoginRequiredMixin, AdminUserTestMixin, ListView):
