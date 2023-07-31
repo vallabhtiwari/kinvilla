@@ -3,6 +3,10 @@ from django.http import JsonResponse
 
 from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, View, CreateView, ListView, TemplateView
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from user.mixins import AdminUserTestMixin
+
 from http import HTTPStatus
 import json
 
@@ -77,7 +81,7 @@ class CreateBookingView(View):
         return JsonResponse(context, status=HTTPStatus.OK)
 
 
-class BookingListView(ListView):
+class BookingListView(LoginRequiredMixin, ListView):
     model = Booking
 
     def get_queryset(self):
@@ -87,7 +91,7 @@ class BookingListView(ListView):
         )
 
 
-class CreateResidentVerificationView(CreateView):
+class CreateResidentVerificationView(LoginRequiredMixin, CreateView):
     model = Verification
     form_class = ResidentVerificationForm
     template_name = "core/resident_verification_form.html"
@@ -104,7 +108,7 @@ class CreateResidentVerificationView(CreateView):
 
 
 ############################################################################################
-class UpdateVerificationiViewAdmin(UpdateView):
+class UpdateVerificationiViewAdmin(LoginRequiredMixin, AdminUserTestMixin, UpdateView):
     fields = ["status"]
     model = Verification
     pk_url_kwarg = "resident_id"
@@ -112,7 +116,7 @@ class UpdateVerificationiViewAdmin(UpdateView):
     success_url = reverse_lazy("core:verification-list-admin")
 
 
-class UpdateBookingViewAdmin(UpdateView):
+class UpdateBookingViewAdmin(LoginRequiredMixin, AdminUserTestMixin, UpdateView):
     fields = ["room_applied", "status"]
     model = Booking
     pk_url_kwarg = "booking_id"
@@ -136,7 +140,7 @@ class UpdateBookingViewAdmin(UpdateView):
         return super().form_valid(form)
 
 
-class VerificationListViewAdmin(ListView):
+class VerificationListViewAdmin(LoginRequiredMixin, AdminUserTestMixin, ListView):
     model = Verification
     template_name = "core/admin/verification_list_admin.html"
 
@@ -156,7 +160,7 @@ class VerificationListViewAdmin(ListView):
         return context
 
 
-class BookingListViewAdmin(ListView):
+class BookingListViewAdmin(LoginRequiredMixin, AdminUserTestMixin, ListView):
     model = Booking
     template_name = "core/admin/booking_list_admin.html"
 

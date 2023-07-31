@@ -6,6 +6,9 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, UpdateView
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin
+from user.mixins import AdminUserTestMixin
 
 from .models import Payment
 from user.models import Resident
@@ -19,9 +22,13 @@ razorpay_client = razorpay.Client(
 razorpay_client.set_app_details({"title": "KinVilla", "version": "0.0"})
 
 
+@login_required
 def request_payment(request):
-    resident = Resident.objects.get(resident_id=request.session.get("resident_id"))
-    room = Room.objects.get(room_number=request.session.get("room_number"))
+    try:
+        resident = Resident.objects.get(resident_id=request.session.get("resident_id"))
+        room = Room.objects.get(room_number=request.session.get("room_number"))
+    except:
+        return HttpResponseBadRequest("<h2>Invalid request</h2>")
 
     amount = float(room.rent)
     old_payments = Payment.objects.filter(payer=resident)
@@ -145,7 +152,7 @@ def handle_payment(request):
         return HttpResponseBadRequest()
 
 
-class PaymentListViewAdmin(ListView):
+class PaymentListViewAdmin(LoginRequiredMixin, AdminUserTestMixin, ListView):
     model = Payment
     template_name = "payment/admin/payment_list_admin.html"
 
@@ -159,7 +166,7 @@ class PaymentListViewAdmin(ListView):
         return context
 
 
-class PaymentDetailViewAdmin(UpdateView):
+class PaymentDetailViewAdmin(LoginRequiredMixin, AdminUserTestMixin, UpdateView):
     model = Payment
     fields = ["amount", "status"]
     pk_url_kwarg = "payment_id"

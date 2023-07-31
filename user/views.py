@@ -1,5 +1,8 @@
 from django.shortcuts import redirect, render, reverse
 from django.views.generic import ListView, View, CreateView, UpdateView, DetailView
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .mixins import AdminUserTestMixin
 from django.urls import reverse_lazy
 
 from .forms import ResidentUpdateFormAdmin, UserRegisterForm, ResidentUpdateForm
@@ -22,13 +25,13 @@ class CreateUserView(CreateView):
         return render(request, self.template_name, context)
 
 
-class ResidentDetailView(DetailView):
+class ResidentDetailView(LoginRequiredMixin, DetailView):
     model = Resident
     slug_url_kwarg = "resident_id"
     slug_field = "resident_id"
 
 
-class ResidentUpdateView(UpdateView):
+class ResidentUpdateView(LoginRequiredMixin, UpdateView):
     model = Resident
     form_class = ResidentUpdateForm
     template_name = "user/resident_update.html"
@@ -41,7 +44,7 @@ class ResidentUpdateView(UpdateView):
         )
 
 
-class DashboardViewAdmin(View):
+class DashboardViewAdmin(LoginRequiredMixin, AdminUserTestMixin, View):
     template_name = "user/admin/admin_dashboard.html"
 
     def get(self, request, *args, **kwargs):
@@ -61,7 +64,7 @@ class DashboardViewAdmin(View):
         return render(request, self.template_name, context)
 
 
-class ResidentListViewAdmin(ListView):
+class ResidentListViewAdmin(LoginRequiredMixin, AdminUserTestMixin, ListView):
     model = Resident
     template_name = "user/admin/resident_list_admin.html"
 
@@ -70,7 +73,7 @@ class ResidentListViewAdmin(ListView):
         return residents.filter(user__is_admin=False)
 
 
-class ResidentUpdateViewAdmin(UpdateView):
+class ResidentUpdateViewAdmin(LoginRequiredMixin, AdminUserTestMixin, UpdateView):
     model = Resident
     form_class = ResidentUpdateFormAdmin
     template_name = "user/admin/resident_update_admin.html"

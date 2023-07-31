@@ -1,5 +1,7 @@
 from django.shortcuts import reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from user.mixins import AdminUserTestMixin
 
 from .models import Room
 
@@ -23,7 +25,7 @@ class RoomDetailView(DetailView):
     pk_url_kwarg = "room_number"
 
 
-class AddRoomViewAdmin(CreateView):
+class AddRoomViewAdmin(LoginRequiredMixin, AdminUserTestMixin, CreateView):
     model = Room
     fields = ["room_number", "type", "ac", "rent", "occupied"]
     template_name = "room/admin/room_form_admin.html"
@@ -43,7 +45,7 @@ class AddRoomViewAdmin(CreateView):
         )
 
 
-class UpdateRoomViewAdmin(UpdateView):
+class UpdateRoomViewAdmin(LoginRequiredMixin, AdminUserTestMixin, UpdateView):
     model = Room
     fields = ["type", "ac", "rent", "occupied"]
     template_name = "room/admin/room_form_admin.html"
