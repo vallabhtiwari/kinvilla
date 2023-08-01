@@ -18,6 +18,7 @@ class CreateUserView(CreateView):
     success_url = reverse_lazy("user:user-login")
 
     def get(self, request, *args, **kwargs):
+        print("YO")
         form = UserRegisterForm()
         context = {
             "form": form,

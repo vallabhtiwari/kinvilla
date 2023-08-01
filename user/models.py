@@ -9,11 +9,17 @@ from .utils import generate_resident_id
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, primary_key=True)
+    first_name = models.CharField(max_length=50, null=False, blank=False)
+    last_name = models.CharField(max_length=50, null=False, blank=False)
     is_admin = models.BooleanField(default=False)
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["first_name", "last_name"]
+
+    def save(self, *args, **kwargs):
+        print(dir(self))
+        return super().save(*args, **kwargs)
 
 
 class Resident(models.Model):
