@@ -17,14 +17,6 @@ class CreateUserView(CreateView):
     form_class = UserRegisterForm
     success_url = reverse_lazy("user:user-login")
 
-    def get(self, request, *args, **kwargs):
-        print("YO")
-        form = UserRegisterForm()
-        context = {
-            "form": form,
-        }
-        return render(request, self.template_name, context)
-
 
 class ResidentDetailView(LoginRequiredMixin, DetailView):
     model = Resident

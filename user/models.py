@@ -17,10 +17,6 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
-    def save(self, *args, **kwargs):
-        print(dir(self))
-        return super().save(*args, **kwargs)
-
 
 class Resident(models.Model):
     resident_id = models.SlugField(unique=True, primary_key=True, editable=False)
